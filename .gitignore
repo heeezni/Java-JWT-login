@@ -1,0 +1,75 @@
+# Spring Boot + Gradle + IntelliJ + macOS + Windows 협업용
+
+# === Build ===
+/build/
+out/
+*.class
+
+# === Logs ===
+*.log
+hs_err_pid*
+
+# === IDE (IntelliJ, VSCode) ===
+.idea/
+*.iml
+.vscode/
+
+# === OS 시스템 파일 ===
+.DS_Store               # macOS
+**/.DS_Store
+Thumbs.db               # Windows
+ehthumbs.db
+ehthumbs_vista.db
+[Dd]esktop.ini          # 폴더 설정 정보
+$RECYCLE.BIN/           # 윈도우 휴지통
+*.lnk                   # 윈도우 바로가기 파일
+
+# === Gradle ===
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle-wrapper.jar
+
+# === 패키징 결과물 ===
+*.jar
+*.war
+*.ear
+
+# === 환경/보안 파일 ===
+.env
+keys/
+
+# === 기타 ===
+*.swp
+*.tmp
+*.bak
+*.stackdump
+
+### Git ###
+# Created by git for backups. To disable backups in Git:
+# $ git config --global mergetool.keepBackup false
+*.orig
+
+# Created by git when using merge tools for conflicts
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
+*_BACKUP_*.txt
+*_BASE_*.txt
+*_LOCAL_*.txt
+*_REMOTE_*.txt
+
+# .env.local, .env.dev 등도 무시
+.env*
+
+# 로그 디렉토리 무시
+/logs/
+
+# 실행파일 (macOS, Windows CLI 실행용)
+*.exe
+*.bat
+*.cmd
+*.command
+
+# 설정파일인 application-dev.properties 파일만 지정해서 무시
+application-dev.properties

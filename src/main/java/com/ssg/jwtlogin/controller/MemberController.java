@@ -25,7 +25,7 @@ public class MemberController {
         CustomUserDetails customUserDetails = (CustomUserDetails) customUserDetailsService.loadUserByUsername(username);
 
         // 추출한 유저의 비밀번호 - 파라미터로 넘어온 유저의 비번 비교
-        if (customUserDetails==null && passwordEncoder.matches(password, customUserDetails.getPassword())) {
+        if (customUserDetails != null && passwordEncoder.matches(password, customUserDetails.getPassword())) {
             // 로그인 성공하였으므로, JWT 발급
 
         }

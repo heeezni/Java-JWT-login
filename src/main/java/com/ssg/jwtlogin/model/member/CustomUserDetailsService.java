@@ -1,5 +1,7 @@
 package com.ssg.jwtlogin.model.member;
 
+import com.ssg.jwtlogin.domain.CustomUserDetails;
+import com.ssg.jwtlogin.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,8 +20,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 데이터베이스에서 해당 유저명으로 객체를 조회
+        Member member = jpaMemberRepository.findById(username);
+        if (member == null) {
+            throw new UsernameNotFoundException("로그인 정보가 올바르지 않습니다.");
+        }
 
         // 코드에는 보이지 않지만, 내부적으로 DaoAuthenticationProvider가 비밀번호 검증을 스스로 수행
-        return null;
+        return new CustomUserDetails(member); // member를 Spring이 이해하는 객체로 변환
     }
 }

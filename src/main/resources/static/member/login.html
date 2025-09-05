@@ -57,6 +57,13 @@
 </div>
 <script>
     $("#bt_login").click(()=>{
+        /*$("form").attr({
+            action: "/member/login",
+            method: "POST",
+        });
+        $("form").submit();
+         */
+
         $.ajax({
             url:"/member/login",
             type:"POST",

@@ -24,11 +24,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Configuration
 @EnableWebSecurity
 public class JwtSecurityConfig {
+
     private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
-    public OncePerRequestFilter jwtAuthFilter(JwtUtil jwtUtil) {
-        return new JwtAuthFilter(jwtUtil);
+    public OncePerRequestFilter jwtAuthFilter(JwtUtil jwtUtil, CustomUserDetailsService customUserDetailsService) {
+        return new JwtAuthFilter(jwtUtil,customUserDetailsService);
     }
 
     @Bean
@@ -62,7 +63,7 @@ public class JwtSecurityConfig {
                                                             DaoAuthenticationProvider provider) throws Exception {
         http
                 // REST/JWT 사용 시 비활성화
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 // 세션을 만들지도, 사용하지도 않도록 정책을 STATELESS로 설정
                 // 시큐리티가 인증상태를 더 이상 세선에 저장하지 않게 함
                 .sessionManagement(session->session

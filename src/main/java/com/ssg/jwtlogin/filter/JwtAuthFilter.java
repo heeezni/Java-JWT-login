@@ -1,5 +1,7 @@
 package com.ssg.jwtlogin.filter;
 
+import com.ssg.jwtlogin.domain.CustomUserDetails;
+import com.ssg.jwtlogin.model.member.CustomUserDetailsService;
 import com.ssg.jwtlogin.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -7,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -27,6 +30,7 @@ import java.util.Map;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -34,14 +38,19 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         // 클라이언트가 Authorization의 Bearer에 함께 보낸 Token을 검증
         String header = request.getHeader("Authorization");
-        if (header != null
-                && header.startsWith("Bearer ")
-                && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7); // index 7번째부터 토큰이 시작
+
             if(jwtUtil.validateToken(token)){  // 토큰 검증 시도 -> 토큰이 유효하다면?
                 // 사용자 정보 중 username 추출
                 String username = jwtUtil.getUsername(token);
                 log.debug("토큰으로 부터 추출한 사용자 정보는 {}",username);
+
+                // **Security에게 이 요청이 인증을 받은 요청이라는 사실을 저장해야함!**
+                CustomUserDetails customUserDetails = (CustomUserDetails) customUserDetailsService.loadUserByUsername(username);
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(auth);
+
             } else {
                 // 토큰이 유효하지 않은 경우 error
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

@@ -84,13 +84,13 @@
             url:"/member/mypage",
             method:"GET",
             headers:{
-                "authorization": "Bearer " + localStorage.getItem("accessToken")
+                "Authorization": "Bearer " + localStorage.getItem("accessToken")
             },
             success:function(data){
                 console.log(data)
             },
             error:function(xhr){
-                console.log(xhr.status,",",xhr.responseText)
+                console.log(xhr.status,xhr.responseText)
             }
         });
     });

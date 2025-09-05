@@ -3,9 +3,11 @@ package com.ssg.jwtlogin.util;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Component
 public class JwtUtil {
 
     @Value("${jwt.secret}") // application.properties에 들어있는 key 가져오기

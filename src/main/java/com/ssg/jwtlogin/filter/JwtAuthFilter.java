@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * 클라이언트의 요청을 처리하는 모든 컨트롤러에서 각각 JWT 유효성 체크하기보다는
@@ -41,6 +42,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 // 사용자 정보 중 username 추출
                 String username = jwtUtil.getUsername(token);
                 log.debug("토큰으로 부터 추출한 사용자 정보는 {}",username);
+            } else {
+                // 토큰이 유효하지 않은 경우 error
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json;charset=UTF-8");
+                response.getWriter().print(Map.of("error message","토큰이 유효하지 않습니다."));
+                return;
             }
         }
 

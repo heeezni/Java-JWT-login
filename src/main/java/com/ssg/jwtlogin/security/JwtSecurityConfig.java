@@ -73,8 +73,13 @@ public class JwtSecurityConfig {
                 // 시큐리티의 폼로그인 기능 : 컨트롤러없이도 로그인 인증 처리됨
                 // JWT에서는 개발자가 토큰을 컨트롤러에서 발급해야하므로, 컨트롤러 활성화 시키고, 대신 form 로그인 기본 기능 비활성화
                 .formLogin(AbstractHttpConfigurer::disable)
-                .authenticationProvider(provider);
-                //.addFilterBefore(jwtAuthFilter, AuthorizationFilter.class)
+                .authorizeHttpRequests(auth->auth
+                        .requestMatchers("/member/login.html").permitAll() // 로그인 폼에 대해 해제
+                        .requestMatchers("/member/login").permitAll() // 로그인 요청에 대해 해제
+                        .anyRequest().authenticated()
+                        )
+                .authenticationProvider(provider)
+                .addFilterBefore(jwtAuthFilter, AuthorizationFilter.class);
         return http.build();
     }
 }

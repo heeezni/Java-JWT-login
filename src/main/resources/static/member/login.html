@@ -66,10 +66,12 @@
 
         $.ajax({
             url:"/member/login",
-            type:"POST",
+            method:"POST",
             data:$("form").serialize(),
             success:function(data){
-                console.log(data)
+                console.log("AccssToken 값 : "+data.accessToken)
+                // AccessToken 꺼내서 보관해놓아야 함
+                localStorage.setItem("accessToken",data.accessToken);
             },
             error:function(xhr){
                 console.log("로그인 실패",xhr.responseText)
@@ -79,7 +81,17 @@
 
     $("#bt_access").click(()=>{
         $.ajax({
-
+            url:"/member/mypage",
+            method:"GET",
+            headers:{
+                "authorization": "Bearer " + localStorage.getItem("accessToken")
+            },
+            success:function(data){
+                console.log(data)
+            },
+            error:function(xhr){
+                console.log(xhr.status,",",xhr.responseText)
+            }
         });
     });
 </script>
